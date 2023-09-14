@@ -1,0 +1,17 @@
+<% layout('layouts/boilerplate') %>
+    <!-- layout is being use for the ejs-mate property, layout refers to the body in boilerplate -->
+
+    <div class="row">
+        <div class="col-10 offset-1">
+            <div class="alert alert-danger" role="alert">
+                <h4 class="alert-heading">
+                    <%= err.message %>
+                </h4>
+                <% if (process.env.NODE_ENV !=="production" ) { %>
+                    <p>
+                        <%= err.stack %>
+                    </p>
+                    <% } %>
+            </div>
+        </div>
+    </div>

@@ -1,0 +1,131 @@
+<% layout('layouts/boilerplate') %>
+    <!-- layout is being use for the ejs-mate property, layout refers to the body in boilerplate -->
+    <link rel="stylesheet" href="/stylesheets/starsForRating.css">
+
+
+
+    <div class="row">
+        <div class="col-6">
+
+            <div id="campgroundCarousel" class="carousel slide">
+                <div class="carousel-inner">
+                    <!-- we'are using 'upload.array'  on the campground routes file, that's why we can upload multiple 
+                        images (on cloudinary or aws) for single campground. And in campground Model's schema 'Images' is a field-->
+                    <!-- ( let img of showCamp.images) { -->
+                    <% showCamp.images.forEach((img,i)=>{ %>
+                        <div class="carousel-item <%= i ===0? 'active':'' %>">
+                            <img crossorigin="anonymous" src="<%=img.url %>" class="d-block w-100" alt="...">
+                        </div>
+                        <% }) %>
+                </div>
+                <%if(showCamp.images.length>1){ %>
+                    <button class="carousel-control-prev" type="button" data-bs-target="#campgroundCarousel"
+                        data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Previous</span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#campgroundCarousel"
+                        data-bs-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Next</span>
+                    </button>
+                    <% } %>
+            </div>
+            <div class="card mb-3">
+
+                <div class="card-body">
+                    <h5 class="card-title">
+                        <%= showCamp.title %>
+                    </h5>
+                    <p class="card-text">
+                        <%=showCamp.description %>
+                    </p>
+                </div>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item text-muted">
+                        <%= showCamp.location %>
+                    </li>
+                    <li class="list-group-item "> Submitted by:
+                        <%= showCamp.owner.username %>
+                    </li>
+                    <li class="list-group-item">
+                        $<%= showCamp.price %>/night
+                    </li>
+                </ul>
+                <% if(signedInUser && showCamp.owner.equals(signedInUser)) {%>
+                    <div class="card-body">
+                        <a href="/campgrounds/<%=showCamp._id %>/edit" class="card-link btn btn-info">Edit</a>
+                        <form class="d-inline" action="/campgrounds/<%=showCamp._id%>?_method=delete" method="post">
+                            <button class="btn btn-danger">Delete</button>
+                        </form>
+                    </div>
+                    <% } %>
+                        <div class="card-footer text-muted">2 days ago</div>
+            </div>
+        </div>
+
+
+        <div class=" row col-6">
+        <div id='map'></div>
+
+            <% if(signedInUser) { %>
+                <h2>Leave a Review</h2>
+                <form action="/campgrounds/<%=showCamp._id%>/review" novalidate class="validated-form" method="post">
+
+                    <div class="mb-3">
+                        <fieldset class="starability-basic">
+                            <input type="radio" id="no-rate" class="input-no-rate" name="review[rating]" value="1"
+                                checked aria-label="No rating." />
+                            <input type="radio" id="first-rate1" name="review[rating]" value="1" />
+                            <label for="first-rate1" title="Terrible">1 star</label>
+                            <input type="radio" id="first-rate2" name="review[rating]" value="2" />
+                            <label for="first-rate2" title="Not good">2 stars</label>
+                            <input type="radio" id="first-rate3" name="review[rating]" value="3" />
+                            <label for="first-rate3" title="Average">3 stars</label>
+                            <input type="radio" id="first-rate4" name="review[rating]" value="4" />
+                            <label for="first-rate4" title="Very good">4 stars</label>
+                            <input type="radio" id="first-rate5" name="review[rating]" value="5" />
+                            <label for="first-rate5" title="Amazing">5 stars</label>
+                        </fieldset>
+                    </div>
+                    <div class="mb-3">
+                        <label for="body" class="form-label">Review Text</label>
+                        <textarea class="form-control" name="review[body]" id="body" cols="30" rows="3"
+                            required></textarea>
+                        <div class="valid-feedback">
+                            Looks good!
+                        </div>
+                    </div>
+                    <button class="btn btn-success mb-3">Submit</button>
+                </form>
+                <% } %>
+                    <% for (let r of showCamp.review){ %>
+                        <div class="card mb-3">
+                            <div class="card-body">
+                                <h5 class="card-title">
+                                    <%= r.reviewOwner.username %>
+                                </h5>
+                                <p class="starability-result" data-rating="<%=r.rating %>">
+                                    Rated: <%=r.rating %> stars
+                                </p>
+                                <p class="card-text"> Review: <%= r.body%>
+                                </p>
+
+                                <% if(signedInUser && r.reviewOwner.equals(signedInUser)) {%>
+                                    <form action="/campgrounds/<%=showCamp._id%>/review/<%=r._id%>?_method=delete"
+                                        method="post">
+                                        <button class="btn btn-danger btn-sm">Delete</button>
+                                    </form>
+                                    <% } %>
+                            </div>
+                            <% } %>
+                        </div>
+        </div>
+
+
+        <script>
+            const mapBoxTokenAgain = '<%-process.env.MAPBOX_TOKEN%>'
+            const campground = <%- JSON.stringify(showCamp) %>
+        </script>
+
+        <script src="/javascripts/showPageMap.js"></script>

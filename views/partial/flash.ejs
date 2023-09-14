@@ -1,0 +1,35 @@
+<!-- here we are using the if statement because we are giving the 'success' to every routes (for app.use middleware in
+app.js)  and flash.ejs has been included boilerplate-->
+
+<div>
+    <% if (success && success.length) { %>
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <%= success %>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        <%} %>
+</div>
+<div>
+    <%if(update && update.length){ %>
+        <div class="alert alert-dark alert-dismissible fade show" role="alert">
+            <%= update %>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        <% } %>
+</div>
+<div>
+    <%if(erase && erase.length){ %>
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <%= erase %>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        <% } %>
+</div>
+<div>
+    <%if(error && error.length){ %>
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <%= error %>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        <% } %>
+</div>
