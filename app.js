@@ -2,7 +2,6 @@ if (process.env.NODE_ENV !== "production") {
     require('dotenv').config();
 }
 
-
 const express = require('express');   //With the help of EJS, we create and use different or multiple views. 
 // In views, Either we could have EJS files(URLs) or we can use this in JSON as well
 const app = express();
@@ -27,7 +26,7 @@ const MongoStore = require('connect-mongo'); //storage for the sessions's data i
 //but to deploy the app, we use the mongo foe the sessions.
 
 
-const ourMongoDbUrl = 'mongodb://127.0.0.1:27017/yelp-camp';
+const ourMongoDbUrl = process.env.MONGO_DB_URL || 'mongodb://127.0.0.1:27017/yelp-camp';
 // process.env.MONGO_DB_URL
 
 main().catch(err => console.log(`Mongo ERROR, ${err}`));
@@ -41,12 +40,13 @@ app.set('view engine', 'ejs');   // we put this to initiate EJS property
 app.set('views', path.join(__dirname, 'views'))  // this is to launch the site or app successfuly within any directory
 
 
+const ourSecret = process.env.SECRET || 'notagoodsecret';
 
 const ourMongoStore = MongoStore.create({  //creating a new MongoStore for the sessions to be used.
     mongoUrl: ourMongoDbUrl,
     touchAfter: 24 * 60 * 60,
     crypto: {
-        secret: 'notagoodsecret'
+        secret: ourSecret
     }
 });
 
@@ -58,7 +58,7 @@ ourMongoStore.on('error', function (e) {
 const sessionConfig = {  //for the argument of session app.use
     store: ourMongoStore,
     name: 'sessionName',  //'connect.sid' is the default name.
-    secret: 'notagoodsecret',
+    secret: ourSecret,
     resave: false,
     saveUninitialized: true,
     cookie: {
