@@ -1,5 +1,4 @@
-const BaseJoi = require('joi');//this is for the Schema for the data before it reaches to the mongoose.
-// We check either the data is in the correct form. we can use 'express-validator' instead of 'Joi'.
+const BaseJoi = require('joi');
 
 const sanitizeHtml = require('sanitize-html');
 
@@ -23,11 +22,10 @@ const extension = (joi) => ({
     }
 });
 
-const Joi = BaseJoi.extend(extension);  //we're changing the normal 'Joi' with the sanitized 'Joi' which will help in vulnerability. 
-//now we can use custimized method of 'escapeHtml' in the required positions.
+const Joi = BaseJoi.extend(extension);
 
-module.exports.campgroundSchema = Joi.object({   //here we are checking if the data is valid,complete and in correct format or not in the campground creation on server side,
-    campground: Joi.object({    //to check this we have to define an Schema which is not a mongoose Schema
+module.exports.campgroundSchema = Joi.object({  
+    campground: Joi.object({    
         title: Joi.string().required().escapeHTML(),
         price: Joi.number().required().min(0),
         // image: Joi.string().required(),
