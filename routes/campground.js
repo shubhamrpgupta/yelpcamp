@@ -1,13 +1,13 @@
 const express = require('express');
 const router = express.Router();
-const catchAsync = require('../Utils/catchAsync')   //this is to handle the async errors.
-const { isLoggedIn, isOwnerValid, validateCampground } = require('../middleware');  //we're checking if the user is logged in or not
+const catchAsync = require('../Utils/catchAsync') 
+const { isLoggedIn, isOwnerValid, validateCampground } = require('../middleware'); 
 const campController = require('../controllers/campsControls');
-const multer = require('multer');  //this is to upload the image on localStorage/(aws or cloudinary)
-const { cloudStorage } = require('../cloudinary');  //because we have made a new storage in cloudinary.
+const multer = require('multer');  
+const { cloudStorage } = require('../cloudinary');  
 const upload = multer({
-    storage: cloudStorage // dest:'uploads/'
-});  //giving the req's data to store at that particular location(aws/cloudinary or localStorage)
+    storage: cloudStorage 
+}); 
 router.route('/')
     .get(catchAsync(campController.allCampgrounds))
     .post(isLoggedIn, upload.array('image'), validateCampground, catchAsync(campController.newCampground));
