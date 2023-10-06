@@ -10,7 +10,7 @@ async function main() {
     console.log("MONGO CONNECTION OPEN!!")
 }
 
-//this is to get the random name in the seedDB:
+
 const sample = array => (array[Math.floor(Math.random() * array.length)])
 
 
