@@ -1,8 +1,8 @@
 const Campground = require('../models/campground');
-const { cloudinary } = require('../cloudinary');   //In case of edit a campground, to delete the uploaded images from the cloudinary.
-const mbxGeocoding = require('@mapbox/mapbox-sdk/services/geocoding');  //for the geometry of the location
-const mapBoxToken = process.env.MAPBOX_TOKEN;  //token from the mapbox.com to use the website
-const geocoder = mbxGeocoding({ accessToken: mapBoxToken })  //giving the mapbox of express the token of mapbox.com to use the api from mapbox.com
+const { cloudinary } = require('../cloudinary');   
+const mbxGeocoding = require('@mapbox/mapbox-sdk/services/geocoding');  
+const mapBoxToken = process.env.MAPBOX_TOKEN; 
+const geocoder = mbxGeocoding({ accessToken: mapBoxToken })  
 
 
 module.exports.allCampgrounds = async (req, res) => {
@@ -18,7 +18,7 @@ module.exports.newCampground = async (req, res) => {
         query: req.body.campground.location,
         limit: 1
     }).send()
-    // if (!req.body.campground) { throw new ExpressError(); }   // here we are checking if there are any missing data which is required.
+
     const newCamp = new Campground(req.body.campground);    //here we used req.body.campground because in the POST REQUEST FORM in NEW.ejs
     //where we give the information regarding the new campground, we have NAME in the input type. 
     // In the NAME, we gave data in ARRAY format ie camground[title / location]
@@ -26,7 +26,6 @@ module.exports.newCampground = async (req, res) => {
     //which we have given in the campground model, in the geometry option for new campground.
     newCamp.images = req.files.map(f => ({ url: f.path, filename: f.filename }))
     //with the multer, we are getting 'req.file' in which uploaded file's data are there from the cloudinary.
-    //and we are puting the req.files data in 'newCamp.images'
     newCamp.owner = req.user._id;
     await newCamp.save();
     req.flash('success', 'Successfully Made A New Campground');
@@ -50,9 +49,9 @@ module.exports.updateCampground = async (req, res) => {
     updateCamp.save();
     if (req.body.deleteImages) {
         for (let filenameOfDeleteImage of req.body.deleteImages) {
-            await cloudinary.uploader.destroy(filenameOfDeleteImage);  //deleting the image with the filename from the cloudinary
+            await cloudinary.uploader.destroy(filenameOfDeleteImage);  
         }
-        await updateCamp.updateOne({ $pull: { images: { filename: { $in: req.body.deleteImages } } } })  //deleting the uploaded image from the server site or from mongoose.
+        await updateCamp.updateOne({ $pull: { images: { filename: { $in: req.body.deleteImages } } } }) 
     }
     req.flash('update', 'Updated Your Campground Info')
     res.redirect(`/campgrounds/${id}`)
