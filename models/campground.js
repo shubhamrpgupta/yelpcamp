@@ -11,7 +11,7 @@ const ImageSchema = new mongoose.Schema({
 ImageSchema.virtual('thumb').get(function () {
     return this.url.replace('/upload', '/upload/w_200/')
 });
-const opts = { toJSON: { virtuals: true } };  //this is because of the index mapbox popup only. not necessity for the model.
+const opts = { toJSON: { virtuals: true } };  //this is because of the index mapbox popup only. No necessity for the model.
 
 
 const CampgroundSchema = new mongoose.Schema({
@@ -46,7 +46,7 @@ CampgroundSchema.virtual('properties.popUpMarkup').get(function () {  //this is 
             <p>${this.description.substring(0, 20)}...</p>`
 });
 
-CampgroundSchema.post('findOneAndDelete', async function (camp) {   //this is a mongoose middleware
+CampgroundSchema.post('findOneAndDelete', async function (camp) {   
     if (camp.review.length) {
         await Review.deleteMany({ _id: { $in: camp.review } })
     }
