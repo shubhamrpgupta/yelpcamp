@@ -1,13 +1,10 @@
 <% layout('layouts/boilerplate') %>
-    <!-- layout is being use for the ejs-mate property, layout refers to the body in boilerplate -->
     <div class="row">
         <h1 class="text-center">Edit <%= foundCamp.title %>
         </h1>
         <div class="col-md-6 offset-md-3">
             <form action="/campgrounds/<%= foundCamp._id %>?_method=put" method="POST" novalidate class="validated-form"
-                enctype="multipart/form-data"> <!-- here novalidate is telling
-                browser to not to validate because we are doing the validation with the Bootstrap (class is
-                validated-form in boilerplate) -->
+                enctype="multipart/form-data">
                 <div class="mb-3">
                     <label class="form-label" for="title">Title :</label>
                     <input class="form-control" type="text" id="title" name="campground[title]"
