@@ -17,7 +17,6 @@ module.exports.deleteReview = async (req, res) => {
     const { id, reviewId } = req.params;
     await Review.findByIdAndDelete(reviewId);
     await Campground.findByIdAndUpdate(id, { $pull: { reviews: reviewId } })
-    //we're using mongoose operator'$pull'. google the mongoose operator and you'll get it.
     req.flash('erase', 'Deleted the review')
     res.redirect(`/campgrounds/${id}`)
 }
