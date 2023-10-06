@@ -1,5 +1,4 @@
 <% layout('layouts/boilerplate') %>
-    <!-- layout is being use for the ejs-mate property, layout refers to the body in boilerplate -->
     <link rel="stylesheet" href="/stylesheets/starsForRating.css">
 
 
@@ -9,9 +8,6 @@
 
             <div id="campgroundCarousel" class="carousel slide">
                 <div class="carousel-inner">
-                    <!-- we'are using 'upload.array'  on the campground routes file, that's why we can upload multiple 
-                        images (on cloudinary or aws) for single campground. And in campground Model's schema 'Images' is a field-->
-                    <!-- ( let img of showCamp.images) { -->
                     <% showCamp.images.forEach((img,i)=>{ %>
                         <div class="carousel-item <%= i ===0? 'active':'' %>">
                             <img crossorigin="anonymous" src="<%=img.url %>" class="d-block w-100" alt="...">
