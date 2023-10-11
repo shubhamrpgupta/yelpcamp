@@ -1,4 +1,6 @@
 "YelpCamp" is a website which I have creating and deployed as well. The tools and info for the Yelp are below.
+It includes CRUD operation, Upload images.
+
 
 **Tools** which I have used are-
 Javascript, 
